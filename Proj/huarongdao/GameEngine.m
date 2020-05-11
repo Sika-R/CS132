@@ -40,7 +40,7 @@ classdef GameEngine < handle
                 case 'up'
                     for i = pos
                         newpos = [newpos; [i(1) - 1, i(2)]];
-                        if i(1) - 1 < 0
+                        if i(1) - 1 <= 0
                             suc = false;
                             break;
                         end
@@ -56,7 +56,7 @@ classdef GameEngine < handle
                 case 'left'
                     for i = pos
                         newpos = [newpos; [i(1), i(2) - 1]];
-                        if i(2) - 1 < 0
+                        if i(2) - 1 <= 0
                             suc = false;
                             break
                         end
