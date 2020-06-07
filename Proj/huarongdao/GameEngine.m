@@ -4,8 +4,45 @@ classdef GameEngine < handle
         chessBoard;
     end
     methods
+        
+        function randomBoard(engine)
+            engine.chessBoard = zeros(5, 4);
+            tmp_loc = [1, 2, 3, 6, 7, 8, 11, 12, 13];
+            tmp = tmp_loc(randperm(9, 1));
+            engine.chessBoard(tmp:tmp + 1) = [1, 1];
+            engine.chessBoard(tmp + 5 :tmp + 6) = [1, 1];
+            zero_lists = [];
+            for i = 1 : 5
+                for j = 1 : 4
+                    if i < 5 && isequal(engine.chessBoard(i : i + 1, j), [0; 0])
+                        zero_lists = [zero_lists; [(j - 1) * 5 + i, (j - 1) * 5 + i + 1]];
+                    end
+                    if j < 4 && isequal(engine.chessBoard(i, j :j + 1), [0, 0])
+                        zero_lists = [zero_lists; [(j - 1) * 5 + i, j * 5 + i]];
+                    end
+                end
+            end
+            possible_pos = randperm(size(zero_lists, 1));
+            big_cnt = 0;
+            i = 1;
+            while big_cnt < 5 && i < size(zero_lists, 1)
+                if engine.chessBoard(zero_lists(possible_pos(i), 1)) == 0 && engine.chessBoard(zero_lists(possible_pos(i), 2)) == 0
+                    big_cnt = big_cnt + 1;
+                    engine.chessBoard(zero_lists(possible_pos(i), 1)) = big_cnt + 1;
+                    engine.chessBoard(zero_lists(possible_pos(i), 2)) = big_cnt + 1;
+                end
+                i = i + 1;
+            end
+            tmp_loc = find(engine.chessBoard == 0, 6);
+            possible_pos = randperm(6, 4);
+            for i = 1 : 4
+                engine.chessBoard(tmp_loc(possible_pos(i))) = i + 6;
+            end
+            engine.chessBoard
+        end
+        
         function initBoard(engine)
-            engine.chessBoard = [2, 1, 1, 3; 2, 1, 1, 3; 4, 6, 6, 5; 4, 0, 0, 5; 7, 8, 9, 10];
+            engine.chessBoard = [2, 1, 1, 3; 2, 1, 1, 3; 6, 4, 4, 5; 6, 0, 0, 5; 7, 8, 9, 10];
         end
         
         function suc = verifySuccess(engine)
